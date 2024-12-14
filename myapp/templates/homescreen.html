@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Store</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .product-card {
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">E-Commerce Store</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                       <a class="nav-link" href="{% url 'home' %}">Home</a> 
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for category in categories %}
+                            <li>
+                                <a class="dropdown-item" href="{% url 'product_list' %}?category={{ category.category_id }}">
+                                    {{ category.category_name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                </ul>
+                <!-- Admin Dashboard Navigation -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                            Admin Panel
+                        </a>
+                       <ul class="dropdown-menu">
+    <!-- Link to admin dashboard -->
+    <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+
+    <!-- Link to manage products -->
+    <li><a class="dropdown-item" href="{% url 'manage_products' %}">Manage Products</a></li>
+
+    <!-- Link to add product -->
+    <li><a class="dropdown-item" href="{% url 'add_product' %}">Add Product</a></li>
+
+    <!-- Link to logout -->
+    <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+</ul>
+
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container-fluid bg-primary text-white text-center py-5">
+        <h1 class="display-4">Welcome to Our Store</h1>
+        <p class="lead">Discover Amazing Products at Great Prices</p>
+    </div>
+
+    <!-- Active Discounts Section -->
+    {% if active_discounts %}
+    <div class="container my-4">
+        <h2 class="text-center mb-4">Current Discounts</h2>
+        <div class="row">
+            {% for discount in active_discounts %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ discount.discount_code }}</h5>
+                        <p class="card-text">{{ discount.percentage }}% OFF</p>
+                        <p class="text-muted">Expires: {{ discount.expiration_date }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Featured Products Section -->
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row">
+            {% for product in featured_products %}
+            <div class="col-md-3 mb-4">
+                <div class="card product-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ product.product_name }}</h5>
+                        <p class="card-text">{{ product.description|truncatewords:10 }}</p>
+                        <p class="text-muted">Price: ${{ product.price }}</p>
+                        <a href="{% url 'product_detail' product.product_id %}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <div class="container">
+            <p>&copy; 2024 E-Commerce Store. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
