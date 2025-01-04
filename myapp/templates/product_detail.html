@@ -1,32 +1,42 @@
 {% extends 'base.html' %}
-
+{% block title %}{{ product.product_name }} - Detail{% endblock %}
 {% block content %}
 <div class="container my-4">
     <div class="row">
+        <div class="col-md-6">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.product_name }}" class="img-fluid mb-3">
+            {% endif %}
+        </div>
         <div class="col-md-6">
             <h1>{{ product.product_name }}</h1>
             <p>{{ product.description }}</p>
             <p class="h4 text-primary">Price: ${{ product.price }}</p>
             <p>Stock: {{ product.stock_quantity }} available</p>
-            
             <button class="btn btn-success btn-lg">Add to Cart</button>
         </div>
     </div>
-
-    <!-- Related Products -->
+    
+    {% if related_products %}
     <div class="row mt-5">
         <h2>Related Products</h2>
         {% for related_product in related_products %}
         <div class="col-md-3">
-            <div class="card">
-                <div class="card-body">
+            <div class="card product-card">
+                {% if related_product.image %}
+                    <img src="{{ related_product.image.url }}" class="card-img-top" alt="{{ related_product.product_name }}">
+                {% endif %}
+                <div class="card-body text-center">
                     <h5 class="card-title">{{ related_product.product_name }}</h5>
                     <p class="card-text">Price: ${{ related_product.price }}</p>
                     <a href="{% url 'product_detail' related_product.product_id %}" class="btn btn-primary">View</a>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <p class="text-muted">No related products found.</p>
         {% endfor %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}

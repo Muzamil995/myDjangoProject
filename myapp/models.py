@@ -11,6 +11,8 @@ class Category(models.Model):
     def __str__(self):
         return self.category_name
 
+from django.db import models
+
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=255)
@@ -18,9 +20,11 @@ class Product(models.Model):
     price = models.FloatField()
     stock_quantity = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='products/', null=True, blank=True)  # Image field added
 
     def __str__(self):
         return self.product_name
+
 
 class User(models.Model):
     ROLE_CHOICES = [

@@ -1,26 +1,27 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container my-4">
     <h1>Our Products</h1>
-    
-    <!-- Category Filter -->
     <div class="row mb-3">
         <div class="col-md-3">
             <select class="form-control" onchange="location.href='{% url 'product_list' %}?category=' + this.value">
                 <option value="">All Categories</option>
                 {% for category in categories %}
-                    <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                <option value="{{ category.category_id }}" {% if selected_category == category.category_id|stringformat:"s" %}selected{% endif %}>
+                    {{ category.category_name }}
+                </option>
                 {% endfor %}
             </select>
         </div>
     </div>
 
-    <!-- Product Grid -->
     <div class="row">
         {% for product in products %}
         <div class="col-md-4 mb-4">
-            <div class="card">
+            <div class="card h-100">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.product_name }}">
+                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ product.product_name }}</h5>
                     <p class="card-text">{{ product.description|truncatewords:15 }}</p>
@@ -32,32 +33,25 @@
         {% endfor %}
     </div>
 
-    <!-- Pagination -->
     {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                </li>
+            <li class="page-item">
+                <a class="page-link" href="?{{ pagination_query }}page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
             {% endif %}
-
+            
             {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ num }}</span>
-                    </li>
-                {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                    </li>
-                {% endif %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                <a class="page-link" href="?{{ pagination_query }}page={{ num }}">{{ num }}</a>
+            </li>
             {% endfor %}
-
+            
             {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
-                </li>
+            <li class="page-item">
+                <a class="page-link" href="?{{ pagination_query }}page={{ page_obj.next_page_number }}">Next</a>
+            </li>
             {% endif %}
         </ul>
     </nav>

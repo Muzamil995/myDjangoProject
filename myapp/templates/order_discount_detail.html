@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Discount Details</title>
+</head>
+<body>
+    <h1>Order Discount Details</h1>
+    {% if order_discount %}
+        <p><strong>Order Discount ID:</strong> {{ order_discount.0 }}</p>
+        <p><strong>Order:</strong> {{ order_discount.1 }}</p>
+        <p><strong>Discount:</strong> {{ order_discount.2 }}</p>
+    {% else %}
+        <p>No order discount found.</p>
+    {% endif %}
+</body>
+</html>
